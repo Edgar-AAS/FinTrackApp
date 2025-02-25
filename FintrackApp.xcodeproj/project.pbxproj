@@ -20,11 +20,7 @@
 		D3CAB8FE2D5FDE11008C1E55 /* AddTransactionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8CC2D5FDE11008C1E55 /* AddTransactionInteractor.swift */; };
 		D3CAB8FF2D5FDE11008C1E55 /* AlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8CE2D5FDE11008C1E55 /* AlertViewModel.swift */; };
 		D3CAB9012D5FDE11008C1E55 /* AddTransactionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8D12D5FDE11008C1E55 /* AddTransactionPresenter.swift */; };
-		D3CAB9022D5FDE11008C1E55 /* AddCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8D32D5FDE11008C1E55 /* AddCategoryCell.swift */; };
 		D3CAB9032D5FDE11008C1E55 /* AddTransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8D42D5FDE11008C1E55 /* AddTransactionViewController.swift */; };
-		D3CAB9042D5FDE11008C1E55 /* CategoryDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8D52D5FDE11008C1E55 /* CategoryDescriptionCell.swift */; };
-		D3CAB9052D5FDE11008C1E55 /* CategorySelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8D62D5FDE11008C1E55 /* CategorySelectionCell.swift */; };
-		D3CAB9072D5FDE11008C1E55 /* TransactionNoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8D82D5FDE11008C1E55 /* TransactionNoteCell.swift */; };
 		D3CAB9082D5FDE11008C1E55 /* BalanceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8DC2D5FDE11008C1E55 /* BalanceHeaderView.swift */; };
 		D3CAB9092D5FDE11008C1E55 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8DD2D5FDE11008C1E55 /* HomeViewController.swift */; };
 		D3CAB90A2D5FDE11008C1E55 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CAB8DE2D5FDE11008C1E55 /* TransactionCell.swift */; };
@@ -63,11 +59,7 @@
 		D3CAB8CC2D5FDE11008C1E55 /* AddTransactionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionInteractor.swift; sourceTree = "<group>"; };
 		D3CAB8CE2D5FDE11008C1E55 /* AlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewModel.swift; sourceTree = "<group>"; };
 		D3CAB8D12D5FDE11008C1E55 /* AddTransactionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionPresenter.swift; sourceTree = "<group>"; };
-		D3CAB8D32D5FDE11008C1E55 /* AddCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryCell.swift; sourceTree = "<group>"; };
 		D3CAB8D42D5FDE11008C1E55 /* AddTransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewController.swift; sourceTree = "<group>"; };
-		D3CAB8D52D5FDE11008C1E55 /* CategoryDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDescriptionCell.swift; sourceTree = "<group>"; };
-		D3CAB8D62D5FDE11008C1E55 /* CategorySelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionCell.swift; sourceTree = "<group>"; };
-		D3CAB8D82D5FDE11008C1E55 /* TransactionNoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNoteCell.swift; sourceTree = "<group>"; };
 		D3CAB8DC2D5FDE11008C1E55 /* BalanceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceHeaderView.swift; sourceTree = "<group>"; };
 		D3CAB8DD2D5FDE11008C1E55 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D3CAB8DE2D5FDE11008C1E55 /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
@@ -307,10 +299,6 @@
 			isa = PBXGroup;
 			children = (
 				D3CAB8D42D5FDE11008C1E55 /* AddTransactionViewController.swift */,
-				D3CAB8D32D5FDE11008C1E55 /* AddCategoryCell.swift */,
-				D3CAB8D52D5FDE11008C1E55 /* CategoryDescriptionCell.swift */,
-				D3CAB8D62D5FDE11008C1E55 /* CategorySelectionCell.swift */,
-				D3CAB8D82D5FDE11008C1E55 /* TransactionNoteCell.swift */,
 				D3CAB91A2D5FDF11008C1E55 /* AddTransactionScreen.swift */,
 			);
 			path = Views;
@@ -420,14 +408,10 @@
 				D3F95A832D64C8DB004EE17E /* HomeRouter.swift in Sources */,
 				D3CAB8FF2D5FDE11008C1E55 /* AlertViewModel.swift in Sources */,
 				D3CAB9012D5FDE11008C1E55 /* AddTransactionPresenter.swift in Sources */,
-				D3CAB9022D5FDE11008C1E55 /* AddCategoryCell.swift in Sources */,
 				D33B0AD92D6BED9200335946 /* HeaderSectionView.swift in Sources */,
 				D3F95A7A2D63F652004EE17E /* HomeInteractor.swift in Sources */,
 				D3CAB9032D5FDE11008C1E55 /* AddTransactionViewController.swift in Sources */,
-				D3CAB9042D5FDE11008C1E55 /* CategoryDescriptionCell.swift in Sources */,
-				D3CAB9052D5FDE11008C1E55 /* CategorySelectionCell.swift in Sources */,
 				D3CAB91B2D5FDF11008C1E55 /* AddTransactionScreen.swift in Sources */,
-				D3CAB9072D5FDE11008C1E55 /* TransactionNoteCell.swift in Sources */,
 				D3CAB9082D5FDE11008C1E55 /* BalanceHeaderView.swift in Sources */,
 				D3CAB9092D5FDE11008C1E55 /* HomeViewController.swift in Sources */,
 				D3CAB90A2D5FDE11008C1E55 /* TransactionCell.swift in Sources */,
