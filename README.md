@@ -34,5 +34,5 @@ O **FinTrack** é um aplicativo intuitivo para acompanhar suas finanças pessoai
 
 1. **Clone o repositório:**  
    ```bash
-   git clone https://github.com/seu-usuario/FinTrack.git
+   git clone git@github.com:Edgar-AAS/FinTrackApp.git
    cd FinTrack
