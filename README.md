@@ -19,9 +19,7 @@ O **FinTrack** é um aplicativo intuitivo para acompanhar suas finanças pessoai
 
 ---
 
-## 🛠 Tecnologias e Arquitetura  
-
-### **🖥️ Stack Tecnológico**  
+## 🛠 Tecnologias
 - 🏗 **Linguagem:** Swift  
 - 📐 **Arquitetura:** VIP  
 - 🎨 **Construção de UI:** UIKit (ViewCode)  
