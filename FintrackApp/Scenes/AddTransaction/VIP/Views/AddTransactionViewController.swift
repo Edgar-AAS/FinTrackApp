@@ -37,31 +37,34 @@ final class AddTransactionViewController: UIViewController {
 
 extension  AddTransactionViewController: AddTransactionScreenDelegate {
     func didAddTransactionTap(_ view: AddTransactionScreen) {
-        if let addTransactionRequest = customView.getAddTransactionRequest() {
+        let addTransactionRequest = customView.getAddTransactionRequest()
             interactor?.addTransaction(request: addTransactionRequest)
-        }
+        
     }
     
     func didAddCategoryTap(_ view: AddTransactionScreen) {
-        let alertView: UIAlertController = .init(title: "Criar Categoria", message: "Adicione um titulo a categoria", preferredStyle: .alert)
+        let alertView = UIAlertController(
+            title: "Criar Categoria",
+            message: "Adicione um título à categoria",
+            preferredStyle: .alert
+        )
         
-        alertView.addTextField { field in
-            field.placeholder = "Title"
-        }
+        alertView.addTextField { $0.placeholder = "Título" }
         
-        let createAction: UIAlertAction = .init(title: "Create", style: .default) { [weak self] action in
-            guard let strongSelf = self else { return }
+        let createAction = UIAlertAction(title: "Criar", style: .default) { [weak self] _ in
+            guard let self = self,
+                  let categoryTitle = alertView.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !categoryTitle.isEmpty else { return }
             
-            if let field = alertView.textFields?.first,
-               let categoryTitle = field.text, !categoryTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                strongSelf.interactor?.addCategory(with: categoryTitle)
-            }
+            self.customView.setCategoryTitle(with: categoryTitle)
+            self.interactor?.addCategory(with: categoryTitle)
         }
         
-        let cancelAction: UIAlertAction = .init(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel)
         
         alertView.addAction(cancelAction)
         alertView.addAction(createAction)
+        
         present(alertView, animated: true)
     }
 }

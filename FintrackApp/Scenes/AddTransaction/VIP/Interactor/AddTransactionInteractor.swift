@@ -55,7 +55,7 @@ extension AddTransactionInteractor: AddTransactionBusinessLogic {
     }
     
     func addTransaction(request: AddTransactionRequest) {
-        categoryDataManager.fetchById(request.categoryId) { [weak self] result in
+        categoryDataManager.fetchById(request.categoryId!) { [weak self] result in
             self?.handleFetchByIdResult(result: result, request: request)
         }
     }
@@ -77,7 +77,7 @@ private extension AddTransactionInteractor {
         let transaction = Transaction(context: dataContext)
         transaction.id = UUID()
         transaction.title = request.title
-        transaction.amount = request.amount
+        transaction.amount = request.amount?.removeCurrencyInputFormatting() ?? 0
         transaction.isIncome = request.isIncome
         transaction.note = request.description
         transaction.date = request.date

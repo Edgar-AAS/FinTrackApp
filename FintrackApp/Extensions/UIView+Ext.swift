@@ -111,5 +111,114 @@ extension UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }
+    
+    func makeContainer(backgroundColor: UIColor = UIColor.black.withAlphaComponent(0.1),
+                       cornerRadius: CGFloat = 12,
+                       clipsToBounds: Bool = true) -> UIView {
+        
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.backgroundColor = backgroundColor
+        container.layer.cornerRadius = cornerRadius
+        container.clipsToBounds = clipsToBounds
+        return container
+    }
+    
+    func makeLabel(text: String = "",
+                   font: UIFont = .systemFont(ofSize: 14),
+                   textColor: UIColor = .black,
+                   textAlignment: NSTextAlignment = .left,
+                   numberOfLines: Int = 1) -> UILabel {
+        
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = text
+        label.font = font
+        label.textColor = textColor
+        label.textAlignment = textAlignment
+        label.numberOfLines = numberOfLines
+        return label
+    }
+    
+    func makeButton(title: String,
+                    systemImageName: String? = nil,
+                    foregroundColor: UIColor = .white,
+                    backgroundColor: UIColor = .systemBackground,
+                    clipToBounds: Bool = true,
+                    fontSize: CGFloat = 14,
+                    fontWeight: UIFont.Weight = .regular,
+                    imagePadding: CGFloat = 8,
+                    cornerRadius: CGFloat = 12,
+                    contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading,
+                    actionTitle: String,
+                    target: AnyObject,
+                    actionHandler: @escaping () -> Void) -> UIButton {
+        
+        var configuration = UIButton.Configuration.plain()
+        configuration.title = title
+    
+        var container = AttributeContainer()
+        container.font = UIFont.systemFont(ofSize: fontSize, weight: fontWeight)
+        configuration.attributedTitle = AttributedString(title, attributes: container)
+        
+        if let systemImageName = systemImageName {
+            configuration.image = UIImage(systemName: systemImageName)
+        }
+        configuration.baseForegroundColor = foregroundColor
+        configuration.imagePadding = imagePadding
+        configuration.background.backgroundColor = backgroundColor
+        configuration.background.cornerRadius = cornerRadius
+        
+        let button = UIButton(configuration: configuration)
+        button.contentHorizontalAlignment = contentHorizontalAlignment
+        button.clipsToBounds = clipToBounds
+        
+        let tapAction = UIAction(title: actionTitle) { _ in
+            actionHandler()
+        }
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addAction(tapAction, for: .touchUpInside)
+        return button
+    }
+    
+    func makeTextField(placeholder: String? = nil,
+                       initialText: String? = nil,
+                       fontSize: CGFloat,
+                       fontWeight: UIFont.Weight = .regular,
+                       textAlignment: NSTextAlignment = .left,
+                       borderStyle: UITextField.BorderStyle = .none,
+                       keyboardType: UIKeyboardType = .default,
+                       becomeFirstResponder: Bool = false,
+                       backgroundColor: UIColor = .systemBackground,
+                       textColor: UIColor = .darkGray,
+                       tintColor: UIColor = .darkGray,
+                       delegate: UITextFieldDelegate? = nil,
+                       target: Any? = nil,
+                       action: Selector? = nil,
+                       controlEvent: UIControl.Event = .editingChanged) -> UITextField {
+        
+        let textField = UITextField()
+        textField.placeholder = placeholder
+        textField.font = UIFont.systemFont(ofSize: fontSize, weight: fontWeight)
+        textField.textAlignment = textAlignment
+        textField.keyboardType = keyboardType
+        textField.borderStyle = borderStyle
+        textField.delegate = delegate
+        textField.textColor = textColor
+        textField.tintColor = tintColor
+        
+        if becomeFirstResponder {
+            textField.becomeFirstResponder()
+        }
+        
+        if let target = target, let action = action {
+            textField.addTarget(target, action: action, for: controlEvent)
+        }
+        
+        textField.text = initialText
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }
 }
 

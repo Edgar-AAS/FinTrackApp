@@ -26,7 +26,6 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideNavigationBar()
-        view.backgroundColor = Colors.lightBackground
         customView.setupTableViewProtocols(delegate: self, dataSource: self, headerDelegate: self)
         interactor?.fetchTransactionsWith(offset: 0, limit: 50)
     }

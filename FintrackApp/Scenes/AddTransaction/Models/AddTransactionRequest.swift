@@ -8,11 +8,10 @@
 import Foundation
 
 struct AddTransactionRequest {
-    let categoryId: UUID
-    let title: String
-    let amount: Double
+    let categoryId: UUID?
+    let title: String?
+    let amount: String?
     let description: String?
-    let date: String
-    let transactionTitle: String
+    let date: String?
     let isIncome: Bool
 }

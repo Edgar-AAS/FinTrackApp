@@ -29,7 +29,7 @@ final class AddTransactionScreen: UIView {
     private var isIncome: Bool = true {
         didSet {
             segmentControl.selectedSegmentIndex = isIncome ? 0 : 1
-            amountTextField.textColor = isIncome ? .systemGreen : .systemRed
+            amountTextField.textColor = isIncome ? UIColor(hexString: "4CAF50") : UIColor(hexString: "CD5C5C")
         }
     }
     
@@ -51,10 +51,8 @@ final class AddTransactionScreen: UIView {
         
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
-        
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(donePressed))
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelPressed))
-        
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
         
@@ -69,39 +67,35 @@ final class AddTransactionScreen: UIView {
     @objc private func donePressed() {
         if let categories, !categories.isEmpty {
             let index = categoryPickerView.selectedRow(inComponent: 0)
-            categoryTextField.text = categories[index].title
+            let categoryTitle = categories[index].title
+            setCategoryTitle(with: categoryTitle)
         }
         categoryTextField.resignFirstResponder()
     }
     
+    
     private let customScrollView = CustomScrollView()
     
-    private let dateContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black.withAlphaComponent(0.2)
-        view.layer.cornerRadius = 12
-        view.clipsToBounds = true
-        return view
-    }()
+    private lazy var dateContainer = makeContainer()
+    private lazy var timeContainer = makeContainer()
+    private lazy var amountContainer = makeContainer()
+    private lazy var detailsContainer = makeContainer()
     
-    private let timeContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black.withAlphaComponent(0.2)
-        view.layer.cornerRadius = 12
-        view.clipsToBounds = true
-        return view
-    }()
+    private lazy var dateLabel = makeLabel(font: UIFont.systemFont(ofSize: 16), textColor: .black, textAlignment: .center)
+    private lazy var timeLabel = makeLabel(font: UIFont.systemFont(ofSize: 16), textColor: .black, textAlignment: .center)
+    private lazy var transactionTitleLabel = makeLabel(text: "Title", font: UIFont.systemFont(ofSize: 16, weight: .semibold), textColor: .lightGray)
+    private lazy var transactionDescriptionLabel = makeLabel(text: "Description", font: UIFont.systemFont(ofSize: 16, weight: .semibold), textColor: .lightGray)
+    private lazy var categoryDetailsLabel = makeLabel(text: "Details", font: UIFont.systemFont(ofSize: 16, weight: .semibold), textColor: .lightGray)
+    private lazy var categoryLabel = makeLabel(text: "Category", font: UIFont.systemFont(ofSize: 16, weight: .semibold), textColor: .black)
     
-    private let amountContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black.withAlphaComponent(0.1)
-        view.layer.cornerRadius = 12
-        view.clipsToBounds = true
-        return view
-    }()
+    private lazy var transactionTitleBottomLine = makeSeparatorLine()
+    private lazy var transactionDescriptionBottomLine = makeSeparatorLine()
+    private lazy var categorySeparator = makeSeparatorLine()
+    
+    private lazy var dateAndTimeStackView = makeStackView(with: [dateContainer, timeContainer], distribution: .fillEqually, spacing: 8, axis: .horizontal)
+    private lazy var amountStackView = makeStackView(with: [segmentControl, amountTextField, dateAndTimeStackView], aligment: .center, axis: .vertical)
+    private lazy var selectionCategoryStackView = makeStackView(with: [categoryLabel, categoryTextField], aligment: .center, axis: .horizontal)
+    private lazy var detailsStackView = makeStackView(with: [selectionCategoryStackView, categorySeparator, addCategoryButton], axis: .vertical)
     
     private lazy var segmentControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Income", "Expenses"])
@@ -110,200 +104,84 @@ final class AddTransactionScreen: UIView {
         return control
     }()
     
-    private lazy var amountTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Amount"
-        textField.font = UIFont.boldSystemFont(ofSize: 28)
-        textField.textAlignment = .center
-        textField.keyboardType = .decimalPad
-        textField.becomeFirstResponder()
-        textField.textColor = .darkGray
-        textField.tintColor = .darkGray
-        textField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
-        textField.text = String().currencyInputFormatting()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
-    }()
+    private lazy var amountTextField = makeTextField(
+        placeholder: "Amount",
+        initialText: String().currencyInputFormatting(),
+        fontSize: 28,
+        fontWeight: .bold,
+        textAlignment: .center,
+        borderStyle: .none,
+        keyboardType: .decimalPad,
+        becomeFirstResponder: true,
+        textColor: .darkGray,
+        tintColor: .darkGray,
+        target: self,
+        action: #selector(textFieldEditingChanged(_:)),
+        controlEvent: .editingChanged
+    )
     
-    private let dateLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .black
-        label.layer.cornerRadius = 12
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private lazy var transactionTitleTextField = makeTextField(
+        placeholder: "Title",
+        fontSize: 16,
+        borderStyle: .none,
+        textColor: .lightGray
+    )
     
-    private let timeLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.layer.cornerRadius = 12
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private lazy var transactionDescriptionTextField = makeTextField(
+        placeholder: "Description",
+        fontSize: 16,
+        borderStyle: .none,
+        textColor: .lightGray
+    )
     
-    private lazy var dateStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [dateContainer, timeContainer])
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.distribution = .fillEqually
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
+    private lazy var categoryTextField = makeTextField(
+        initialText: "Uncategorized ▼",
+        fontSize: 16,
+        textAlignment: .right,
+        borderStyle: .none,
+        textColor: .lightGray,
+        tintColor: .clear
+    )
     
-    private lazy var amountStackView: UIStackView = {
-        let stackView = makeStackView(with: [segmentControl, amountTextField, dateStackView], aligment: .center, axis: .vertical)
-        stackView.layer.cornerRadius = 12
-        stackView.clipsToBounds = true
-        return stackView
-    }()
-    
-    private let transactionTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Title"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .lightGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let transactionTitleTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Transaction title"
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.textColor = .gray
-        textField.borderStyle = .none
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
-    }()
-    
-    private lazy var transactionTitleBottomLine = makeSeparatorLine()
-    
-    private let transactionDescriptionLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Description"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .lightGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let transactionDescriptionTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Description"
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.textColor = .gray
-        textField.borderStyle = .none
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
-    }()
-    
-    private lazy var transactionDescriptionBottomLine = makeSeparatorLine()
-    
-    private let categoryDetailsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Details"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .lightGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let categoryLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Category"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let categoryTextField: UITextField = {
-        let textField = UITextField()
-        textField.text = "Uncategorized ▼"
-        textField.textAlignment = .right
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.textColor = .lightGray
-        textField.tintColor = .clear
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.borderStyle = .none
-        return textField
-    }()
-    
-    private let transactionNoteLabel: UILabel = {
-        let label = UILabel()
-        label.text = "NOTE"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .lightGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let transactionNoteTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Transaction note"
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.textColor = .gray
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.layer.cornerRadius = 12
-        textField.clipsToBounds = true
-        textField.backgroundColor = .black.withAlphaComponent(0.1)
-        return textField
-    }()
-    
-    private let detailsContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black.withAlphaComponent(0.1)
-        view.layer.cornerRadius = 12
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    private lazy var addCategoryButton: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.title = "Add Category"
-        configuration.image = UIImage(systemName: "plus.circle.fill")
-        configuration.baseForegroundColor = .systemBlue
-        configuration.imagePadding = 8
-        let button = UIButton(configuration: configuration)
-        button.contentHorizontalAlignment = .leading
-        
-        let tapAction = UIAction(title: "addCategoryTap") { [weak self] _ in
+    private lazy var addCategoryButton = makeButton(
+        title: "Add Category",
+        systemImageName: "plus.circle.fill",
+        foregroundColor: .systemBlue,
+        backgroundColor: .clear,
+        fontSize: 16,
+        fontWeight: .semibold,
+        actionTitle: "addCategoryTap",
+        target: self) { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.delegate?.didAddCategoryTap(strongSelf)
         }
-        button.addAction(tapAction, for: .touchUpInside)
-        return button
-    }()
     
-    private lazy var categorySeparator = makeSeparatorLine()
-    private lazy var selectionCategoryStackView = makeStackView(with: [categoryLabel, categoryTextField], aligment: .center, axis: .horizontal)
-    private lazy var detailsStackView = makeStackView(with: [selectionCategoryStackView, categorySeparator, addCategoryButton], axis: .vertical)
-    
-    private lazy var addTransactionButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Add Transaction", for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .systemBlue
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 30
-        
-        let tapAction = UIAction(title: "addTransactionTap") { [weak self] _ in
+    private lazy var addTransactionButton = makeButton(
+        title: "Add Transaction",
+        foregroundColor: .white,
+        backgroundColor: .systemBlue,
+        fontSize: 16,
+        fontWeight: .bold,
+        cornerRadius: 30,
+        contentHorizontalAlignment: .center,
+        actionTitle: "addTransactionTap",
+        target: self) { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.delegate?.didAddTransactionTap(strongSelf)
         }
-        button.addAction(tapAction, for: .touchUpInside)
-        return button
-    }()
     
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         isIncome = sender.selectedSegmentIndex == 0
+    }
+    
+    @objc private func textFieldEditingChanged(_ textField: UITextField) {
+        if let amountString = textField.text?.currencyInputFormatting() {
+            textField.text = amountString
+        }
+    }
+    
+    func setCategoryTitle(with title: String) {
+        categoryTextField.text = title + " ▼"
     }
     
     func setupUI(with viewModel: AddTransactionScreenViewModel) {
@@ -322,28 +200,15 @@ final class AddTransactionScreen: UIView {
         categoryPickerView.reloadAllComponents()
     }
     
-    func getAddTransactionRequest() -> AddTransactionRequest? {
-        if let categoryId = categories?[categoryPickerView.selectedRow(inComponent: 0)].id,
-           let amount = amountTextField.text?.removeCurrencyInputFormatting(),
-           let title = transactionTitleTextField.text,
-           let dateAndTime = dateAndTime,
-           let dateAndTime = FormatDate.format(fromFormat: "dd MMM, yyyy HH:mm", toFormat: "dd-MM-yyyy HH:mm", dateString: dateAndTime){
-            
-            return .init(categoryId: categoryId,
-                         title: title,
-                         amount: amount,
-                         description: transactionDescriptionTextField.text,
-                         date: dateAndTime,
-                         transactionTitle: title,
-                         isIncome: isIncome)
-        }
-        return nil
-    }
-    
-    @objc func textFieldEditingChanged(_ textField: UITextField) {
-        if let amountString = textField.text?.currencyInputFormatting() {
-            textField.text = amountString
-        }
+    func getAddTransactionRequest() -> AddTransactionRequest {
+        return AddTransactionRequest(
+            categoryId: categories?[categoryPickerView.selectedRow(inComponent: 0)].id,
+            title: transactionTitleTextField.text,
+            amount: amountTextField.text,
+            description: transactionDescriptionTextField.text,
+            date: FormatDate.format(fromFormat: "dd MMM, yyyy HH:mm", toFormat: "dd-MM-yyyy HH:mm", dateString: dateAndTime ?? ""),
+            isIncome: isIncome
+        )
     }
 }
 
@@ -485,6 +350,8 @@ extension AddTransactionScreen: CodeView {
     }
     
     func setupAdditionalConfiguration() {
-        backgroundColor = .white
+        backgroundColor = Colors.lightBackground
+        amountStackView.layer.cornerRadius = 12
+        amountStackView.clipsToBounds = true
     }
 }

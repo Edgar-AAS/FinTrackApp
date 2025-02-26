@@ -67,5 +67,9 @@ extension HomeScreen: CodeView {
             bottom: bottomAnchor
         )
     }
+    
+    func setupAdditionalConfiguration() {
+        backgroundColor = Colors.lightBackground
+    }
 }
 
