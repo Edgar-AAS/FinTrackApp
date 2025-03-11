@@ -23,7 +23,7 @@ O **FinTrack** é um aplicativo intuitivo para acompanhar suas finanças pessoai
 - 🏗 **Linguagem:** Swift  
 - 📐 **Arquitetura:** VIP  
 - 🎨 **Construção de UI:** UIKit (ViewCode)  
-- 💾 **Banco de Dados:** Core Data para persistência de transações  
+- 💾 **Persistência Local:** Core Data para persistência de transações  
 - 🎭 **Design Patterns:** Factory, Delegate  
 
 ---
